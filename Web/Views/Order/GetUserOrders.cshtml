@@ -1,0 +1,32 @@
+﻿
+@model IEnumerable<Domain.DomainModels.Order>
+
+<h1>All your orders</h1>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Customer Details</th>
+            <th scope="col">Number of products</th>
+            <th scope="col">Details</th>
+            <th scope="col">Generate pdf</th>
+        </tr>
+    </thead>
+
+    @{int i = 1;}
+    @foreach (var item in Model)
+    {
+        <tbody>
+            <tr>
+                <th scope="row">@i</th>
+                @{i++;
+                }
+                <td>@item.User.FirstName @item.User.LastName</td>
+                <td>@item.TicketsInOrders.Count()</td>
+                <td><a class="btn btn-secondary" asp-controller="Order" asp-action="GetDetailsForOrder" asp-route-id="@item.Id">Details</a></td>
+                <td><a class="btn btn-primary" asp-controller="Order" asp-action="GeneratePDF" asp-route-id="@item.Id">Generate PDF</a></td>
+            </tr>
+        </tbody>
+    }
+</table>

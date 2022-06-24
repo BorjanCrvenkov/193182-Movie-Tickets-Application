@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <h3>Export tickets</h3>
+
+    <form method="POST" asp-controller="Tickets" asp-action="ExportTickets">
+        <div class="form-group w-25">
+            <select name="genreId" class="form-control">
+                @foreach (var item in Model)
+                {
+                    <option value="@item.Id" class="form-control">@item.GenreName</option>
+                }
+            </select>
+
+            <br />
+
+            <button type="submit" class="btn btn-primary">Export</button>
+
+        </div>
+
+    </form>
+
+
+
+</div>
+
+

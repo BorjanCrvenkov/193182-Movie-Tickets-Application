@@ -1,0 +1,32 @@
+﻿
+
+<div class="container justify-content-md-center">
+    
+    <h3>Import Users</h3>
+
+    <div>
+        <p>Системот е направен да ги прима податоците од ексел датотека во следниот формат:</p>
+        <br />
+        <p>Прва    (А) колона: Името на корисникот</p>
+        <br />
+        <p>Втора   (B) колона: Презимето на корисникот</p>
+        <br />
+        <p>Трета   (C) колона: Емаил адресата на корисникот</p>
+        <br />
+        <p>Четврта (D) колона: Лозинката на корисникот</p>
+        <br />
+        <p>Петта   (E) колона: Повторена лозинка на корисникот</p>
+        <br />
+        <p>Шеста   (F) колона: Типот на корисник кој може да биде или STANDARD или ADMINISTRATOR</p>
+    </div>
+
+    <form method="POST" asp-controller="Account" asp-action="ImportUsers" enctype="multipart/form-data">
+        <div class="form-group w-25">
+            <input type="file" name="file" class="form-control" required/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Import Excel</button>
+    </form>
+        
+
+</div>

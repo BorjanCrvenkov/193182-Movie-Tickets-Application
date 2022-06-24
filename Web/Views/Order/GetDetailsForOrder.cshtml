@@ -1,0 +1,63 @@
+﻿@model Domain.DomainModels.Order
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <h4>Ticket</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+    </dl>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ticket Title</th>
+            <th scope="col">Ticket Date</th>
+            <th scope="col">Ticket Price</th>
+            <th scope="col">Ticket Details</th>
+        </tr>
+    </thead>
+
+    @{int i = 1;}
+    @foreach (var item in Model.TicketsInOrders)
+    {
+        <tbody>
+            <tr>
+                <th scope="row">@i</th>
+                @{i++;
+                }
+                <td>@item.Ticket.Title</td>
+                <td>@item.Ticket.StartTime</td>
+                <td>
+                    @item.Ticket.TicketPrice
+                </td>
+                <td><a class="btn btn-secondary" asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Ticket.Id">Details</a></td>
+            </tr>
+        </tbody>
+    }
+</table>

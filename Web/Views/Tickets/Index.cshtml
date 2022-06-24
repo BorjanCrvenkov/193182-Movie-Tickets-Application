@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Domain.DomainModels.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Available Tickets</h3>
+
+<br />
+
+<div class="container">
+    <div class="row">
+        <a asp-action="Create" class="btn btn-primary col-md-2">Create New Ticket</a>
+        <p class="col-md-2"></p>
+        <a asp-action="ExportTickets" class="btn btn-secondary col-md-2" style="margin-left: -30px;">Export Tickets</a>
+    </div>
+
+    <br />
+
+    <div style="margin-top: -60px; margin-left:-30px">
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="m-md-4">
+                    <p style="visibility: hidden">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <h5>Filter tickets by date</h5>
+                    <input class="form-control" name="date" type="date" />
+                </div>
+                <div class="m-md-1">
+
+                </div>
+                <div class="m-md-4">
+                    <p style="visibility: hidden">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <h5>Filter tickets by genre</h5>
+                    <select name="genreId" class="form-control">
+                        <option value="">All</option>
+                        @foreach (var item in ViewBag.Genres)
+                        {
+                            <option value="@item.Id">@item.GenreName</option>
+                        }
+                    </select>
+                </div>
+                <div class="m-md-1">
+                    <input class="btn btn-primary" type="submit" value="Filter" style="margin-top: 90px; margin-left:20px"/>
+                </div>
+
+            </div>
+                
+        </form>
+    </div>
+
+    <br />
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+
+            <div class="card mb-4">
+                <div style="display: flex; flex: 1 1 auto;">
+                    <div class="img-square-wrapper">
+                        <img style="width: 250px;" src="@item.TicketImage" alt="Card image cap">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        @{
+                            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                            @foreach (var i in item.TicketsTypeGenres)
+                            {
+                                sb.Append(i.Genre.GenreName + " ");
+                            }
+
+                            <p class="card-text">Genres: @sb.ToString()</p>
+                        }
+
+                        <p class="card-text">Start time: @item.StartTime</p>
+                        <p class="card-text">Rating: @item.TicketRating</p>
+                        <p class="card-text">Price: @item.TicketPrice</p>
+                        <p class="card-text">Description: @item.TicketDescription</p>
+                        <p class="card-text">Released date: @item.ReleasedDate</p>
+
+
+                        <div class="row">
+                            <div class="m-md-2">
+                                <a class="btn btn-success" asp-action="AddTicketToCart" asp-controller="Tickets" asp-route-id="@item.Id">Add to card</a>
+                            </div>
+                            <div class="m-md-2">
+                                <a class="btn btn-secondary" asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            </div>
+                            <div class="m-md-2">
+                                <a class="btn btn-danger" asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
