@@ -13,16 +13,13 @@ namespace Domain.DomainModels
         [Required]
         public DateTime StartTime { get; set; }
         [Required]
-        public DateTime ReleasedDate { get; set; }
+        public string Description { get; set; }
         [Required]
-        public string TicketDescription { get; set; }
+        public double Price { get; set; }
         [Required]
-        public double TicketPrice { get; set; }
+        public double Rating { get; set; }
         [Required]
-        public double TicketRating { get; set; }
-        [Required]
-        public string TicketImage { get; set; }
-        //public List<Genre> TicketGenres { get; set; }
+        public string Image { get; set; }
 
         public virtual ICollection<TicketsInShoppingCart> TicketsInShoppingCart { get; set; }
         public virtual ICollection<TicketsInOrder> TicketsInOrders { get; set; }

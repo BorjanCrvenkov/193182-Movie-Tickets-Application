@@ -24,6 +24,9 @@
                     </script>
                 </article>
             </form>
+
+            <br />
+
             <div>
                 <h4>For testing</h4>
                 <h5>Any email address</h5>
@@ -40,9 +43,9 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Product Name</th>
+                    <th scope="col">Ticket Name</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">ProductPrice</th>
+                    <th scope="col">Ticket Price</th>
                     <th></th>
                 </tr>
             </thead>
@@ -63,7 +66,7 @@
                             <th scope="row">@(i + 1)</th>
                             <td>@item.CurrentTicket.Title</td>
                             <td>@item.Quantity</td>
-                            <td>$@item.CurrentTicket.TicketPrice</td>
+                            <td>$@item.CurrentTicket.Price</td>
                             <td><a asp-controller="ShoppingCart" asp-action="DeleteFromShoppingCart" asp-route-id="@item.TicketId" class="btn btn-danger">Delete From ShoppingCart</a></td>
                         </tr>
                     }

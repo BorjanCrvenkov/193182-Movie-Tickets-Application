@@ -21,15 +21,18 @@ namespace Web.Controllers
     {
         private readonly UserManager<TicketingUser> userManager;
         private readonly SignInManager<TicketingUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IUserService userService;
+        
 
         public AccountController(UserManager<TicketingUser> userManager,
-            SignInManager<TicketingUser> signInManager, IUserService userService
-            )
+            SignInManager<TicketingUser> signInManager, IUserService userService,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.userService = userService;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Register()
@@ -48,19 +51,20 @@ namespace Web.Controllers
                 {
                     var user = new TicketingUser
                     {
-                        FirstName = request.LastName,
+                        FirstName = request.FirstName,
                         LastName = request.LastName,
                         UserName = request.Email,
                         NormalizedUserName = request.Email,
                         Email = request.Email,
                         EmailConfirmed = true,
-                        UserType = Domain.Enumerations.UserType.STANDARD,
-                        UserImage = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
+                        Image = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
                         UserCart = new ShoppingCart()
                     };
                     var result = await userManager.CreateAsync(user, request.Password);
+                    
                     if (result.Succeeded)
                     {
+                        var result1 = await userManager.AddToRoleAsync(user, "STANDARD");
                         return RedirectToAction("Login");
                     }
                     else
@@ -84,6 +88,41 @@ namespace Web.Controllers
             return View(request);
 
         }
+
+        [Authorize(Roles = "ADMINISTRATOR")]
+        public IActionResult CreateRole()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "ADMINISTRATOR")]
+        [HttpPost, AllowAnonymous]
+        public async Task<IActionResult> CreateRole(RoleDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityRole identityRole = new IdentityRole
+                {
+                    Name = model.RoleName
+                };
+
+                IdentityResult result = await roleManager.CreateAsync(identityRole);
+
+                if (result.Succeeded)
+                {
+                    return Redirect("/");
+                }
+
+                foreach(IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+            }
+            return View(model);
+
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -136,11 +175,17 @@ namespace Web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult ManageUsers()
         {
+            var userId = userManager.GetUserId(HttpContext.User);
+
+            TicketingUser user = userManager.FindByIdAsync(userId).Result;
+
             return View(this.userService.GetAllUsers());
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult Details(String id)
         {
             if (id == null)
@@ -157,25 +202,27 @@ namespace Web.Controllers
             return View(user);
         }
 
-        public IActionResult Edit(String id)
+        [Authorize(Roles = "ADMINISTRATOR")]
+        public async Task<IActionResult> Edit(String id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = this.userService.GetDetailsForUser(id);
+            TicketingUser user = this.userService.GetDetailsForUser(id);
             if (user == null)
             {
                 return NotFound();
             }
+            ViewBag.Admin = await userManager.IsInRoleAsync(user, "ADMINISTRATOR") ? true : false;
             return View(user);
         }
 
-
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(String id, [Bind("Id,FirstName,LastName,Email,Address,UserType,UserImage")] TicketingUser user)
+        public async Task<IActionResult> EditAsync(String id, [Bind("Id,FirstName,LastName,Email,Address,UserType,Image")] TicketingUser user, string role)
         {
 
             if (id != user.Id)
@@ -192,8 +239,20 @@ namespace Web.Controllers
                     user1.LastName = user.LastName;
                     user1.Email = user.Email;
                     user1.Address = user.Address;
-                    user1.UserType = user.UserType;
-                    user1.UserImage = user.UserImage;
+                    user1.Image = user.Image;
+
+                    var admin = await userManager.IsInRoleAsync(user, "ADMINISTRATOR") ? true : false;
+
+                    if (admin)
+                    {
+                        await userManager.RemoveFromRoleAsync(user1, "ADMINISTRATOR");
+                        await userManager.AddToRoleAsync(user1, "STANDARD");
+                    }
+                    else
+                    {
+                        await userManager.RemoveFromRoleAsync(user1, "STANDARD");
+                        await userManager.AddToRoleAsync(user1, "ADMINISTRATOR");
+                    }
                     await this.userManager.UpdateAsync(user1);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -213,11 +272,13 @@ namespace Web.Controllers
             return Redirect("/error");
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult ImportUsers()
         {
             return View();
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportUsers(IFormFile file)
@@ -236,6 +297,7 @@ namespace Web.Controllers
             return Redirect("/Account/ManageUsers");
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         private async Task getUsersFromExcelFile(string fileName)
         {
             string pathToFile = $"{Directory.GetCurrentDirectory()}\\files\\{fileName}";
@@ -263,8 +325,7 @@ namespace Web.Controllers
                                 NormalizedUserName = reader.GetValue(2).ToString(),
                                 Email = reader.GetValue(2).ToString(),
                                 EmailConfirmed = true,
-                                UserType = Domain.Enumerations.UserType.ADMINISTRATOR.ToString().Equals(reader.GetValue(5).ToString()) ? Domain.Enumerations.UserType.ADMINISTRATOR : Domain.Enumerations.UserType.STANDARD,
-                                UserImage = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
+                                Image = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
                                 UserCart = new ShoppingCart()
                             };
                             var result = await userManager.CreateAsync(user, reader.GetValue(4).ToString());
@@ -279,59 +340,7 @@ namespace Web.Controllers
             }
         }
 
-        /*[HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(String id)
-        {
-            this._userService.DeleteUser(id);
-            return RedirectToAction(nameof(Index));
-    }
-
-        // GET: Tickets/Edit/5
-        public IActionResult Edit(String id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = this._userService.GetDetailsForUser(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(String id, [Bind("Id,UserName,Email,FirstName,LastName,UserType")] TicketingUser user)
-        {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                this._userService.GetDetailsForUser(id);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-        */
-
-
+        
     }
 }
 

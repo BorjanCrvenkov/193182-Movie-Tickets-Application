@@ -45,6 +45,7 @@ namespace Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<TicketingUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -67,13 +68,11 @@ namespace Web
             services.AddTransient<IUserService, Service.Implementation.UserService>();
             services.AddTransient<IGenreService, Service.Implementation.GenreService>();
 
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
             if (env.IsDevelopment())

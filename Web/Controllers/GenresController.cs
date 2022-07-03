@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.DomainModels;
 using Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
+    [Authorize(Roles = "ADMINISTRATOR")]
     public class GenresController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -54,7 +56,7 @@ namespace Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GenreName,Id")] Genre genre)
+        public async Task<IActionResult> Create([Bind("Name,Id")] Genre genre)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +89,7 @@ namespace Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("GenreName,Id")] Genre genre)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Id")] Genre genre)
         {
             if (id != genre.Id)
             {

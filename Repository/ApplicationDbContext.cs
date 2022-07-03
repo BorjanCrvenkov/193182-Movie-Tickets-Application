@@ -38,30 +38,30 @@ namespace Repository
                 .ValueGeneratedOnAdd();
 
             builder.Entity<Ticket>()
-                .Property(r => r.Id)
+                .Property(z => z.Id)
                 .ValueGeneratedOnAdd();
 
             builder.Entity<ShoppingCart>()
-               .Property(r => r.Id)
+               .Property(z => z.Id)
                .ValueGeneratedOnAdd();
 
             builder.Entity<TicketsInShoppingCart>()
-                .Property(r => r.Id)
+                .Property(z => z.Id)
                 .ValueGeneratedOnAdd();
 
             builder.Entity<TicketsInShoppingCart>()
-                .HasOne(r => r.CurrentTicket)
-                .WithMany(r => r.TicketsInShoppingCart)
-                .HasForeignKey(r => r.TicketId);
+                .HasOne(z => z.CurrentTicket)
+                .WithMany(z => z.TicketsInShoppingCart)
+                .HasForeignKey(z => z.TicketId);
 
             builder.Entity<TicketsInShoppingCart>()
-                .HasOne(r => r.UserCart)
-                .WithMany(r => r.TicketsInShoppingCart)
-                .HasForeignKey(r => r.ShoppingCartId);
+                .HasOne(z => z.UserCart)
+                .WithMany(z => z.TicketsInShoppingCart)
+                .HasForeignKey(z => z.ShoppingCartId);
 
             builder.Entity<ShoppingCart>()
                 .HasOne<TicketingUser>(z => z.Owner)
-                .WithOne(r => r.UserCart)
+                .WithOne(z => z.UserCart)
                 .HasForeignKey<ShoppingCart>(z => z.OwnerId);
 
             builder.Entity<TicketsInOrder>()

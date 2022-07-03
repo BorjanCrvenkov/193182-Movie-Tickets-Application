@@ -62,7 +62,7 @@ namespace Service.Implementation
 
                 var allTicketPrices = allTickets.Select(z => new
                 {
-                    TicketPrice = z.CurrentTicket.TicketPrice,
+                    TicketPrice = z.CurrentTicket.Price,
                     Quantity = z.Quantity
                 }).ToList();
 
@@ -126,8 +126,8 @@ namespace Service.Implementation
                 for(int i = 1; i <= result.Count; i++)
                 {
                     var currentItem = result[i-1];
-                    totalPrice += (currentItem.Quantity * currentItem.Ticket.TicketPrice);
-                    sb.AppendLine(currentItem.Ticket.Title + " with quantity of " + currentItem.Quantity + " and price of: $" + currentItem.Ticket.TicketPrice);
+                    totalPrice += (currentItem.Quantity * currentItem.Ticket.Price);
+                    sb.AppendLine(currentItem.Ticket.Title + " with quantity of " + currentItem.Quantity + " and price of: $" + currentItem.Ticket.Price);
                 }
 
                 sb.AppendLine("Total price for your order: " + totalPrice.ToString());

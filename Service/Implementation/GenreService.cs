@@ -18,9 +18,14 @@ namespace Service.Implementation
             _repository = repository;
         }
 
+        public void createNewGenre(Genre g)
+        {
+            this._repository.Insert(g);
+        }
+
         public List<Genre> getAllGenres()
         {
-            return this._repository.GetAll().OrderBy(z => z.GenreName).ToList();
+            return this._repository.GetAll().OrderBy(z => z.Name).ToList();
         }
 
         public Genre getGenreDetails(Guid? genreId)

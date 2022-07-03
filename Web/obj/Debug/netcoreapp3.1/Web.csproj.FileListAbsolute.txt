@@ -7,7 +7,6 @@ C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Web.Razo
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Web.RazorAssemblyInfo.cs
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\staticwebassets\Web.StaticWebAssets.Manifest.cache
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\staticwebassets\Web.StaticWebAssets.xml
-C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\scopedcss\bundle\Web.styles.css
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Web.TagHelpers.input.cache
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Web.TagHelpers.output.cache
 C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Web.RazorCoreGenerate.cache
@@ -211,3 +210,5 @@ C:\Users\Borjan\source\repos\193182 Domasna\Web\bin\Debug\netcoreapp3.1\System.I
 C:\Users\Borjan\source\repos\193182 Domasna\Web\bin\Debug\netcoreapp3.1\MailKit.dll
 C:\Users\Borjan\source\repos\193182 Domasna\Web\bin\Debug\netcoreapp3.1\MimeKit.dll
 C:\Users\Borjan\source\repos\193182 Domasna\Web\bin\Debug\netcoreapp3.1\Stripe.net.dll
+C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\CreateRole.cshtml.g.cs
+C:\Users\Borjan\source\repos\193182 Domasna\Web\obj\Debug\netcoreapp3.1\scopedcss\bundle\Web.styles.css

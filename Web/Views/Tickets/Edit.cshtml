@@ -24,29 +24,24 @@
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReleasedDate" class="control-label"></label>
-                <input asp-for="ReleasedDate" class="form-control" />
-                <span asp-validation-for="ReleasedDate" class="text-danger"></span>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TicketDescription" class="control-label"></label>
-                <input asp-for="TicketDescription" class="form-control" />
-                <span asp-validation-for="TicketDescription" class="text-danger"></span>
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TicketPrice" class="control-label"></label>
-                <input asp-for="TicketPrice" class="form-control" />
-                <span asp-validation-for="TicketPrice" class="text-danger"></span>
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TicketRating" class="control-label"></label>
-                <input asp-for="TicketRating" class="form-control" />
-                <span asp-validation-for="TicketRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketImage" class="control-label"></label>
-                <input asp-for="TicketImage" class="form-control" />
-                <span asp-validation-for="TicketImage" class="text-danger"></span>
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
 
@@ -65,12 +60,12 @@
                         }
                         if (flag)
                         {
-                            <option value="@item.Id" selected>@item.GenreName</option>
+                            <option value="@item.Id" selected>@item.Name</option>
                             flag = false;
                         }
                         else
                         {
-                            <option value="@item.Id">@item.GenreName</option>
+                            <option value="@item.Id">@item.Name</option>
                         }
 
                     }

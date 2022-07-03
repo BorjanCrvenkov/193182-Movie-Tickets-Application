@@ -9,5 +9,7 @@ namespace Service.Interface
     {
         public List<Genre> getAllGenres();
         public Genre getGenreDetails(Guid? genreId);
+
+        public void createNewGenre(Genre g);
     }
 }

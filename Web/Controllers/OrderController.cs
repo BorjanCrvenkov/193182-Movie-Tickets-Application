@@ -2,6 +2,7 @@
 using Domain.DomainModels;
 using Domain.Identity;
 using GemBox.Document;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
@@ -27,6 +28,7 @@ namespace Web.Controllers
                 ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             }
 
+            [Authorize(Roles = "ADMINISTRATOR")]
             public IActionResult GetOrders()
             {
                 return View(this._orderService.getAllOrders());
@@ -63,8 +65,8 @@ namespace Web.Controllers
 
                 foreach (var item in order.TicketsInOrders)
                 {
-                    sb.AppendLine(item.Ticket.Title + " with quantity of " + item.Quantity + " and price of: $" + item.Ticket.TicketPrice);
-                    total += (item.Ticket.TicketPrice * item.Quantity);
+                    sb.AppendLine(item.Ticket.Title + " with quantity of " + item.Quantity + " and price of: $" + item.Ticket.Price);
+                    total += (item.Ticket.Price * item.Quantity);
                 }
 
                 document.Content.Replace("{{AllTickets}}", sb.ToString());

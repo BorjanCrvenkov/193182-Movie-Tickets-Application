@@ -46,7 +46,6 @@ namespace Service.Implementation
 
                     if (ticket != null)
                     {
-                        //ticket.TicketGenres.Add(genre);
                         TicketsTypeGenres type = new TicketsTypeGenres
                         {
                             Id = Guid.NewGuid(),

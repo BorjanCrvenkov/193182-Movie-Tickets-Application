@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Domain.Enumerations
 {
-    public enum UserType
+    public enum Roles
     {
-        ADMINISTRATOR, STANDARD
+       STANDARD, ADMINISTRATOR
     }
 }

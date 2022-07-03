@@ -33,27 +33,25 @@
                 <input asp-for="Address" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="UserType" class="control-label"></label>
-                <select asp-for="UserType"  class="form-control">
-                    @foreach (var item in Enum.GetValues(typeof(Domain.Enumerations.UserType)))
-                    {
-                        if (Model.UserType.Equals(item))
+                <label class="control-label">Role</label>
+                <select name="role" class="form-control">
+                        @if (ViewBag.Admin)
                         {
-                            <option value="@item" selected>@item</option>
+
+                            <option value="ADMINISTRATOR" class="form-control" selected>ADMINISTRATOR</option>
+                            <option value="STANDARD" class="form-control">STANDARD</option>
                         }
                         else
                         {
-                            <option value="@item">@item</option>
+                            <option value="ADMINISTRATOR" class="form-control" >ADMINISTRATOR</option>
+                            <option value="STANDARD" class="form-control" selected>STANDARD</option>
                         }
-
-                    }
                 </select>
-                <span asp-validation-for="UserType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserImage" class="control-label"></label>
-                <input asp-for="UserImage" class="form-control" />
-                <span asp-validation-for="UserImage" class="text-danger"></span>
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">

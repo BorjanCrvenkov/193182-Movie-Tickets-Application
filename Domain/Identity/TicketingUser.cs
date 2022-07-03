@@ -1,5 +1,5 @@
 ﻿using Domain.DomainModels;
-using Domain.Enumerations;
+using Domain.Relations;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,7 @@ namespace Domain.Identity
         public string LastName { get; set; }
         public string Address { get; set; }
 
-        public UserType UserType { get; set; }
-
-        public string UserImage { get; set; }
+        public string Image { get; set; }
 
         public virtual ShoppingCart UserCart { get; set; }
 

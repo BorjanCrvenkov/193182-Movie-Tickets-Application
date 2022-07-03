@@ -9,7 +9,7 @@ namespace Domain.DomainModels
     public class Genre : BaseEntity
     {
         [Required]
-        public string GenreName { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<TicketsTypeGenres> TicketsTypeGenres { get; set; }
     }

@@ -13,6 +13,7 @@ using Service.Interface;
 using ClosedXML.Excel;
 using System.Text;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
@@ -52,6 +53,7 @@ namespace Web.Controllers
         }
 
         // GET: Tickets/Create
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult Create()
         {
             ViewBag.Genres = this._genreService.getAllGenres();
@@ -61,9 +63,10 @@ namespace Web.Controllers
         // POST: Tickets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Title,StartTime,ReleasedDate,TicketDescription,TicketPrice,TicketRating,TicketImage")] Ticket ticket,
+        public IActionResult Create([Bind("Id,Title,StartTime,Description,Price,Rating,Image")] Ticket ticket,
             List<Guid> genres)
         {
             if (ModelState.IsValid)
@@ -78,6 +81,7 @@ namespace Web.Controllers
         }
 
         // GET: Tickets/Edit/5
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -99,9 +103,10 @@ namespace Web.Controllers
         // POST: Tickets/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Id,Title,StartTime,ReleasedDate,TicketDescription,TicketPrice,TicketRating,TicketImage")] Ticket ticket,
+        public IActionResult Edit(Guid id, [Bind("Id,Title,StartTime,Description,Price,Rating,Image")] Ticket ticket,
             List<Guid> genres)
         {
             if (id != ticket.Id)
@@ -133,6 +138,7 @@ namespace Web.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -150,6 +156,7 @@ namespace Web.Controllers
         }
 
         // POST: Tickets/Delete/5
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
@@ -182,6 +189,7 @@ namespace Web.Controllers
 
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         public IActionResult ExportTickets()
         {
             List<Genre> genres = this._genreService.getAllGenres();
@@ -189,6 +197,7 @@ namespace Web.Controllers
             return View(genres);
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public FileContentResult ExportTickets(Guid? genreId)
@@ -198,23 +207,21 @@ namespace Web.Controllers
 
             Genre genre = this._genreService.getGenreDetails(genreId);
 
-            string fileName = genre.GenreName + " Tickets.xlsx";
+            string fileName = genre.Name + " Tickets.xlsx";
 
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
             using(var workBook = new XLWorkbook())
             {
-                IXLWorksheet worksheet = workBook.Worksheets.Add(genre.GenreName + " Tickets");
+                IXLWorksheet worksheet = workBook.Worksheets.Add(genre.Name + " Tickets");
 
                 worksheet.Cell(1, 1).Value = "Ticket Name";
-                worksheet.Cell(1, 2).Value = "Ticket Date";
+                worksheet.Cell(1, 2).Value = "Ticket Start Time";
                 worksheet.Cell(1, 3).Value = "Ticket Rating";
                 worksheet.Cell(1, 4).Value = "Ticket Price";
                 worksheet.Cell(1, 5).Value = "Ticket Description";
-                worksheet.Cell(1, 6).Value = "Movie Released Date";
-                worksheet.Cell(1, 7).Value = "Ticket Genres";
+                worksheet.Cell(1, 6).Value = "Ticket Genres";
 
-                StringBuilder sb = new StringBuilder();
 
                 for (int i = 1; i <= tickets.Count(); i++)
                 {
@@ -222,17 +229,18 @@ namespace Web.Controllers
 
                     worksheet.Cell(i + 1, 1).Value = ticket.Title;
                     worksheet.Cell(i + 1, 2).Value = ticket.StartTime;
-                    worksheet.Cell(i + 1, 3).Value = ticket.TicketRating;
-                    worksheet.Cell(i + 1, 4).Value = ticket.TicketPrice;
-                    worksheet.Cell(i + 1, 5).Value = ticket.TicketDescription;
-                    worksheet.Cell(i + 1, 6).Value = ticket.ReleasedDate;
+                    worksheet.Cell(i + 1, 3).Value = ticket.Rating;
+                    worksheet.Cell(i + 1, 4).Value = ticket.Price;
+                    worksheet.Cell(i + 1, 5).Value = ticket.Description;
+
+                    StringBuilder sb = new StringBuilder();
 
                     foreach (var item in ticket.TicketsTypeGenres)
                     {
-                        sb.Append(item.Genre.GenreName + " ");
+                        sb.Append(item.Genre.Name + " ");
                     }
 
-                    worksheet.Cell(i + 1, 7).Value = sb.ToString();
+                    worksheet.Cell(i + 1, 6).Value = sb.ToString();
 
                 }
 
@@ -248,7 +256,6 @@ namespace Web.Controllers
             }
 
         }
-
 
         private bool TicketExists(Guid id)
         {
